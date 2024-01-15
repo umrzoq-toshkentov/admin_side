@@ -11,8 +11,8 @@ export async function getUserList({
   page,
   search,
 }: {
-  page: string;
-  search: string;
+  page?: string;
+  search?: string;
 }): Promise<Response> {
   const response = await axios.get(`${API_URL}/user/list`, {
     params: {

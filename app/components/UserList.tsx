@@ -1,14 +1,8 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
-import { Response, getUserList } from "../api";
-import { useRouter, useSearchParams } from "next/navigation";
-
+import { Response } from "../api";
 import * as React from "react";
 import {
   ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -16,17 +10,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -36,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { UserModel } from "../models/UserModel";
+import { SearchInput } from "./SearchInput";
 
 export const columns: ColumnDef<UserModel>[] = [
   {
@@ -51,7 +38,6 @@ export const columns: ColumnDef<UserModel>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
     accessorKey: "name",
@@ -67,7 +53,12 @@ export const columns: ColumnDef<UserModel>[] = [
   },
   {
     accessorKey: "subscription.tokens",
-    header: () => <div className="text-right">Amount</div>,
+    header: "Токены",
+    cell: ({ row }) => {
+      return (
+        <div className="uppercase">{row.original.subscription.tokens} TKN</div>
+      );
+    },
   },
   {
     id: "actions",
@@ -80,84 +71,27 @@ interface UserListProps {
   data: Response;
 }
 
-export const UserList = ({ data }: UserListProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page") || "1";
-  const search = searchParams.get("search") || "";
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+export const UserList = ({ data: userList }: UserListProps) => {
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const { data: userList } = useQuery({
-    queryKey: ["todos", page, search],
-    queryFn: () => getUserList({ page, search }),
-    initialData: data,
-  });
+  const data = userList.data;
 
   const table = useReactTable({
-    data: userList?.data || [],
+    data: data || [],
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
       rowSelection,
     },
   });
 
-  console.log(userList?.data);
-
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <SearchInput />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -207,30 +141,6 @@ export const UserList = ({ data }: UserListProps) => {
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
       </div>
     </div>
   );
