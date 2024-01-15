@@ -10,7 +10,17 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import {
+  ArrowUpDown,
+  DeleteIcon,
+  Edit2Icon,
+  LucideTrash,
+  PenLine,
+  Trash,
+  Trash2,
+  Trash2Icon,
+  TrashIcon,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +33,7 @@ import {
 } from "@/components/ui/table";
 import { UserModel } from "../models/UserModel";
 import { SearchInput } from "./SearchInput";
+import { Toggle } from "@/components/ui/toggle";
 
 export const columns: ColumnDef<UserModel>[] = [
   {
@@ -64,6 +75,18 @@ export const columns: ColumnDef<UserModel>[] = [
     id: "actions",
     header: "Действия",
     enableHiding: false,
+    cell: ({ row }) => {
+      return (
+        <div className="flex">
+          <Toggle>
+            <PenLine size={12} fill="#1C64F2" />
+          </Toggle>
+          <Toggle>
+            <LucideTrash size={12} fill="#1C64F2" />
+          </Toggle>
+        </div>
+      );
+    },
   },
 ];
 

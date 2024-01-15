@@ -1,15 +1,12 @@
-import { Suspense } from "react";
 import { getUserList } from "./api";
 import { ListPagination } from "./components/ListPagination";
 import { UserList } from "./components/UserList";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  console.log(searchParams, "searchParams");
   const page = searchParams.page;
   const search = searchParams.search;
   const data = await getUserList({ page, search });
