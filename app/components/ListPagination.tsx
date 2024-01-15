@@ -53,8 +53,8 @@ export const ListPagination = ({ pages }: ListPaginationProps) => {
         <Link
           href={
             currentPage === pages
-              ? `/?page=${currentPage + 1}${searchQuery}`
-              : "#"
+              ? "#"
+              : `/?page=${currentPage + 1}${searchQuery}`
           }
         >
           <PaginationItem>

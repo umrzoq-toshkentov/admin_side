@@ -23,7 +23,8 @@ export const SearchInput = () => {
   }, [debouncedSearch]);
 
   return (
-    <div className="flex items-center py-4 w-full">
+    <div className="flex flex-col items-start gap-1 py-4 w-full mb-4">
+      <p>Пользователи</p>
       <Input
         placeholder="Поиск"
         value={search || ""}
