@@ -31,7 +31,7 @@ export const EditDrawer = () => {
       }}
       open={store.open}
     >
-      <SheetContent className="w-[800px] sm:w-[940px]">
+      <SheetContent className="w-[500px] min-w-[500px]">
         <SheetHeader>
           <SheetTitle>{user?.email}</SheetTitle>
         </SheetHeader>
