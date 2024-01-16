@@ -11,7 +11,6 @@ import { useSearchParams } from "next/navigation";
 
 interface ListPaginationProps {
   pages: number;
-  page: number;
 }
 
 export const ListPagination = ({ pages }: ListPaginationProps) => {
@@ -27,7 +26,7 @@ export const ListPagination = ({ pages }: ListPaginationProps) => {
   return (
     <Pagination className="mt-6">
       <PaginationContent>
-        <Link
+        <PaginationLink
           href={
             currentPage > 1 ? `/?page=${currentPage - 1}${searchQuery}` : "#"
           }
@@ -35,22 +34,22 @@ export const ListPagination = ({ pages }: ListPaginationProps) => {
           <PaginationItem>
             <ArrowLeft />
           </PaginationItem>
-        </Link>
+        </PaginationLink>
 
         {pages > 0 &&
           Array(pages)
             .fill(0)
             .map((_, i) => (
-              <Link key={i} href={`/?page=${i + 1}${searchQuery}`}>
-                <PaginationItem>
-                  <PaginationLink isActive={currentPage === i + 1} href="#">
-                    {i + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              </Link>
+              <PaginationLink
+                key={i}
+                isActive={currentPage === i + 1}
+                href={`/?page=${i + 1}${searchQuery}`}
+              >
+                {i + 1}
+              </PaginationLink>
             ))}
 
-        <Link
+        <PaginationLink
           href={
             currentPage === pages
               ? "#"
@@ -60,7 +59,7 @@ export const ListPagination = ({ pages }: ListPaginationProps) => {
           <PaginationItem>
             <ArrowRight />
           </PaginationItem>
-        </Link>
+        </PaginationLink>
       </PaginationContent>
     </Pagination>
   );
