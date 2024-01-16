@@ -1,4 +1,5 @@
 import { getUserList } from "./api";
+import { EditDrawer } from "./components/EditDrawer";
 import { ListPagination } from "./components/ListPagination";
 import { UserList } from "./components/UserList";
 
@@ -17,8 +18,8 @@ export default async function Home({
         <div className="w-11/12">
           <div color="rounded-e-2xl bg-midnight pt-4">
             <UserList data={data} />
-
             <ListPagination pages={data.pages} page={Number(page)} />
+            <EditDrawer />
           </div>
         </div>
       </div>

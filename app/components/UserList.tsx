@@ -10,17 +10,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  DeleteIcon,
-  Edit2Icon,
-  LucideTrash,
-  PenLine,
-  Trash,
-  Trash2,
-  Trash2Icon,
-  TrashIcon,
-} from "lucide-react";
+import { ArrowUpDown, LucideTrash, PenLine } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +24,25 @@ import {
 import { UserModel } from "../models/UserModel";
 import { SearchInput } from "./SearchInput";
 import { Toggle } from "@/components/ui/toggle";
+import { useProxy } from "valtio/utils";
+import { state } from "../store/user-store";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  PointElement,
+  LineElement,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  PointElement,
+  LineElement
+);
 
 export const columns: ColumnDef<UserModel>[] = [
   {
@@ -76,9 +85,15 @@ export const columns: ColumnDef<UserModel>[] = [
     header: "Действия",
     enableHiding: false,
     cell: ({ row }) => {
+      const store = useProxy(state);
       return (
         <div className="flex">
-          <Toggle>
+          <Toggle
+            onClick={() => {
+              store.open = !store.open;
+              store.user = row.original;
+            }}
+          >
             <PenLine size={12} fill="#1C64F2" />
           </Toggle>
           <Toggle>
@@ -95,8 +110,6 @@ interface UserListProps {
 }
 
 export const UserList = ({ data: userList }: UserListProps) => {
-  const [rowSelection, setRowSelection] = React.useState({});
-
   const data = userList.data;
 
   const table = useReactTable({
@@ -106,10 +119,6 @@ export const UserList = ({ data: userList }: UserListProps) => {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onRowSelectionChange: setRowSelection,
-    state: {
-      rowSelection,
-    },
   });
 
   return (
