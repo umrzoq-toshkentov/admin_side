@@ -24,7 +24,7 @@ export const ListPagination = ({ pages }: ListPaginationProps) => {
   if (pages === 0) return null;
 
   return (
-    <Pagination className="mt-6">
+    <Pagination className="mt-6 mb-6">
       <PaginationContent>
         <PaginationLink
           href={
