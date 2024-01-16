@@ -45,11 +45,11 @@ ChartJS.register(
 );
 
 interface UserListProps {
-  data: Response;
+  data?: Response;
 }
 
 export const UserList = ({ data: userList }: UserListProps) => {
-  const data = userList.data;
+  const data = userList?.data;
   const store = useProxy(state);
 
   const columns: ColumnDef<UserModel>[] = React.useMemo(
@@ -165,7 +165,7 @@ export const UserList = ({ data: userList }: UserListProps) => {
         },
       },
     ],
-    []
+    [store]
   );
 
   const table = useReactTable({

@@ -6,11 +6,10 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 interface ListPaginationProps {
-  pages: number;
+  pages?: number;
 }
 
 export const ListPagination = ({ pages }: ListPaginationProps) => {
@@ -36,7 +35,8 @@ export const ListPagination = ({ pages }: ListPaginationProps) => {
           </PaginationItem>
         </PaginationLink>
 
-        {pages > 0 &&
+        {pages &&
+          pages > 0 &&
           Array(pages)
             .fill(0)
             .map((_, i) => (

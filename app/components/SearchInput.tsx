@@ -11,7 +11,7 @@ export const SearchInput = () => {
   const [search, setSearch] = useQueryState("search");
   const searchParams = useSearchParams();
 
-  const page = searchParams.get("page");
+  const page = searchParams.get("page") || "1";
   const debouncedSearch = useDebounce(search, 500);
 
   useEffect(() => {
