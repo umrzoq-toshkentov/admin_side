@@ -20,7 +20,7 @@ export const SearchInput = () => {
     } else {
       router.push(`${pathName}?page=${page}`);
     }
-  }, [debouncedSearch]);
+  }, [debouncedSearch, page, pathName, router]);
 
   return (
     <div className="flex flex-col items-start gap-1 py-4 w-full mb-4">

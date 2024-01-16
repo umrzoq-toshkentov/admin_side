@@ -44,114 +44,129 @@ ChartJS.register(
   LineElement
 );
 
-export const columns: ColumnDef<UserModel>[] = [
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Имя
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "role",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Роль
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "subscription.plan.type",
-
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          План
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "subscription.tokens",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Токены
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <div className="uppercase">{row.original.subscription.tokens} TKN</div>
-      );
-    },
-  },
-  {
-    id: "actions",
-    header: "Действия",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const store = useProxy(state);
-      return (
-        <div className="flex">
-          <Toggle
-            onClick={() => {
-              store.open = !store.open;
-              store.user = row.original;
-            }}
-          >
-            <PenLine size={12} fill="#1C64F2" />
-          </Toggle>
-          <Toggle>
-            <LucideTrash size={12} fill="#1C64F2" />
-          </Toggle>
-        </div>
-      );
-    },
-  },
-];
-
 interface UserListProps {
   data: Response;
 }
 
 export const UserList = ({ data: userList }: UserListProps) => {
   const data = userList.data;
+  const store = useProxy(state);
+
+  const columns: ColumnDef<UserModel>[] = React.useMemo(
+    () => [
+      {
+        accessorKey: "email",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Email
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "name",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Имя
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "role",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Роль
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "subscription.plan.type",
+
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              План
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "subscription.tokens",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Токены
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="uppercase">
+              {row.original.subscription.tokens} TKN
+            </div>
+          );
+        },
+      },
+      {
+        id: "actions",
+        header: "Действия",
+        enableHiding: false,
+        cell: ({ row }) => {
+          return (
+            <div className="flex">
+              <Toggle
+                onClick={() => {
+                  store.open = !store.open;
+                  store.user = row.original;
+                }}
+              >
+                <PenLine size={12} fill="#1C64F2" />
+              </Toggle>
+              <Toggle>
+                <LucideTrash size={12} fill="#1C64F2" />
+              </Toggle>
+            </div>
+          );
+        },
+      },
+    ],
+    []
+  );
 
   const table = useReactTable({
     data: data || [],
